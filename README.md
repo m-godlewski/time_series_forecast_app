@@ -1,1 +1,1 @@
-# Timeseries Prediction App
+# Time Series Forecast App
