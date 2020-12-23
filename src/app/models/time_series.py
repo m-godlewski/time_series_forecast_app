@@ -190,25 +190,3 @@ class TimeSeries:
         return dataset
 
     # endregion
-
-
-
-data_from_file = pd.read_csv("../data/amazon_stock_prices.csv")
-time_series = TimeSeries(dataset=data_from_file, name="amazon_stock_prices")
-print(time_series.min_value)
-print(time_series.max_value)
-print(time_series.average_value)
-print(time_series.std_deviation_value)
-print(time_series.median_value)
-print(time_series.interquartile_value)
-print(time_series.get_quantile(q=0.1))
-print(time_series.get_distant_points())
-time_series.draw()
-time_series.draw_histogram()
-print(time_series.data)
-print(time_series.name)
-
-
-"""
-1. Ujednolicić ilość miejsc po przecinku w obydwóch zbiorach
-"""
