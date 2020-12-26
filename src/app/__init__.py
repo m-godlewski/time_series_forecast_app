@@ -3,9 +3,16 @@ import flask_restful
 import logging
 import logging.config
 import yaml
+import warnings
 
 import app
 import config
+
+
+# disabling startup warnings
+warnings.filterwarnings('ignore')
+mpl_logger = logging.getLogger("matplotlib")
+mpl_logger.setLevel(logging.ERROR)
 
 
 # application logging configuration, based on logging.cfg file

@@ -18,6 +18,9 @@ TEMPLATES_DIR = os.path.join(BASE_DIR, "app/templates")
 # DATA DIRECTORY PATH
 DATA_DIR = os.path.join(BASE_DIR, "data")
 
+# RESULTS DIRECTORY PATH
+RESULTS_DIR = os.path.join(BASE_DIR, "results")
+
 # LOGGING CONFIGURAION
 LOGGING = {
     "CONFIG_FILE": f"{BASE_DIR}/.logs/logging.conf"
