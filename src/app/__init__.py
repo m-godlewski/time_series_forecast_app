@@ -2,8 +2,9 @@ import flask
 import flask_restful
 import logging
 import logging.config
-import yaml
+import os
 import warnings
+import yaml
 
 import app
 import config
@@ -22,6 +23,14 @@ logging.config.dictConfig(yaml.load(open(config.LOGGING["CONFIG_FILE"])))
 # application and api main instances
 APP = flask.Flask(__name__)
 API = flask_restful.Api(APP)
+
+
+# application file upload folder configuration
+APP.config["UPLOAD_FOLDER"] = config.DATA_DIR
+
+
+# application secret key
+APP.secret_key = os.urandom(24)
 
 
 from app import routes

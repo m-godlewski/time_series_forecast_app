@@ -1,3 +1,4 @@
+import os
 import traceback
 import warnings
 warnings.filterwarnings('ignore', 'statsmodels.tsa.ar_model.AR', FutureWarning)
@@ -5,6 +6,9 @@ warnings.filterwarnings('ignore', 'statsmodels.tsa.ar_model.AR', FutureWarning)
 import numpy as np
 import matplotlib.pyplot as plt
 from flask import jsonify
+from flask import Request
+from flask import render_template
+from werkzeug.utils import secure_filename
 from statsmodels.tsa.ar_model import AR
 
 import app
@@ -13,7 +17,33 @@ from app.models.time_series import TimeSeries
 from app.utills.file_manager import FileManager
 
 
-def time_series_analysis(parameters: dict) -> jsonify:
+def home_page():
+    """Renders home page."""
+    return render_template("index.html")
+
+
+def upload_file(request: Request) -> str:
+    """Uploads file received by request, saves it and returns absolute path to this file."""
+    try:
+
+        # retrieves file from request
+        f = request.files["file"]
+
+        # absoulte path to file
+        file_path = os.path.join(config.DATA_DIR, secure_filename(f.filename))
+
+        # saves received file
+        f.save(file_path)
+
+    except Exception:
+        app.logging.error(f"upload_file() ERROR \n{traceback.format_exc()}")
+        return ""
+    else:
+        app.logging.info("File uploaded successfully!")
+        return file_path
+
+
+def time_series_analysis(file_path: str):
     """Returns statistical information of time series included in file 
     which path is given in 'parameters' variable.
     
@@ -26,22 +56,11 @@ def time_series_analysis(parameters: dict) -> jsonify:
     """
     try:
 
-        # checks if there is 'file_name' field in received dictionary
-        if not "file_name" in parameters:
-            app.logging.error("parameter 'file_name' is missing")
-            return jsonify({
-                    "data": {},
-                    "info": "parameter 'file_name' is missing"
-                }), 400
-        else:
-            file_name = parameters.get("file_name")
-
         # loads content of file
-        data_file = FileManager.read_file(file_name=file_name)
+        data_file = FileManager.read_file(file_name=file_path)
 
         # creation of TimeSeries object
-        name = file_name.split(".")[0]
-        time_series = TimeSeries(dataset=data_file, name=name)
+        time_series = TimeSeries(dataset=data_file, name="test")
 
     except Exception:
         app.logging.error(f"time_series_analysis() ERROR \n{traceback.format_exc()}")
@@ -53,11 +72,7 @@ def time_series_analysis(parameters: dict) -> jsonify:
     else:
         app.logging.info(f"'{time_series.name}' time series analysis.")
         app.logging.info(time_series.info)
-        return jsonify({
-                "data": time_series.info,
-                "info": "",
-                "success": True
-            }), 200
+        return render_template("analysis.html", data=time_series.info)
 
 
 def time_series_visualisation(parameters: dict):
