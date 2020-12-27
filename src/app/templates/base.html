@@ -22,11 +22,13 @@
 
     <!-- Navbar -->
     <nav class="navbar justify-content-center navbar-dark bg-dark">
-      <a class="navbar-brand" href="#">Time Series Forecast</a>
+      <a class="navbar-brand h1" href="/">Time Series Forecast</a>
     </nav>
 
     <!-- Page Content -->
-    {% block content %}{% endblock  %}
+    <div class="d-flex justify-content-center align-items-center" style="height:100px;">
+        {% block content %}{% endblock  %}
+    </div>
 
     <!-- Footer -->
     <footer class="page-footer fixed-bottom font-small text-white bg-dark">

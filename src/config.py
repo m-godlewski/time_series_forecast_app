@@ -15,11 +15,11 @@ BASE_DIR = os.path.abspath(os.path.dirname(__file__))
 # TEMPLATES DIRECTORY PATH
 TEMPLATES_DIR = os.path.join(BASE_DIR, "app/templates")
 
+# STATIC DIRECTORY PATH
+STATIC_DIR = os.path.join(BASE_DIR, "app/static")
+
 # DATA DIRECTORY PATH
 DATA_DIR = os.path.join(BASE_DIR, "data")
-
-# RESULTS DIRECTORY PATH
-RESULTS_DIR = os.path.join(BASE_DIR, "results")
 
 # LOGGING CONFIGURAION
 LOGGING = {

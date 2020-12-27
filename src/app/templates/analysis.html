@@ -2,6 +2,12 @@
 
 {% block content %}
 
-<p>{{data}}</p>
+<p>{{data.analyse}}</p>
+</br>
+
+{% for plot in data.plots %} 
+  <img width="400px" height="200px" src="/static/{{plot}}">
+  </br>
+{% endfor %} 
 
 {% endblock  %}

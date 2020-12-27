@@ -142,7 +142,7 @@ class TimeSeries:
 
     # region VISUALISATION METHODS
 
-    def draw(self):
+    def draw(self) -> str:
         """Plot time series graph and save created graph to file."""
         try:
 
@@ -162,10 +162,12 @@ class TimeSeries:
             print(f"TimeSeries.draw() ERROR \n{traceback.format_exc()}")
         else:
             # saving figure to file
-            path = os.path.join(config.RESULTS_DIR, f"{self.name}_plot.png")
+            file_name = f"{self.name}_plot.png"
+            path = os.path.join(config.STATIC_DIR, file_name)
             plt.savefig(path, format="png", dpi=200)
+            return file_name
 
-    def draw_histogram(self):
+    def draw_histogram(self) -> str:
         """Plot time series histogram and save created graph to file."""
         try:
 
@@ -178,11 +180,13 @@ class TimeSeries:
         except Exception:
             print(f"TimeSeries.draw_histogram() ERROR \n{traceback.format_exc()}")
         else:
-            # saving figure to file 
-            path = os.path.join(config.RESULTS_DIR, f"{self.name}_histogram.png")
+            # saving figure to file
+            file_name = f"{self.name}_histogram.png"
+            path = os.path.join(config.STATIC_DIR, file_name)
             plt.savefig(path, format="png", dpi=200)
+            return file_name
 
-    def draw_autocorelation(self, lags: int):
+    def draw_autocorelation(self, lags: int) -> str:
         """Plot autocorelation function of time series for given as 'lags' argument lag value."""
         try:
 
@@ -196,8 +200,10 @@ class TimeSeries:
             print(f"TimeSeries.draw_autocorelation() ERROR \n{traceback.format_exc()}")
         else:
             # saving figure to file
-            path = os.path.join(config.RESULTS_DIR, f"{self.name}_autocorelation_{lags}.png")
+            file_name = f"{self.name}_autocorelation_{lags}.png"
+            path = os.path.join(config.STATIC_DIR, file_name)
             plt.savefig(path, format="png", dpi=200)
+            return file_name
 
     # endregion
 

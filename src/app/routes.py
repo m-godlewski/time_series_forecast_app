@@ -42,20 +42,7 @@ def analysis():
     file_path = session["file_path"]
 
     # calling analysis method
-    return controller.time_series_analysis(file_path=file_path)
-
-
-@APP.route("/visualisation", methods=["POST"])
-def visualisation():
-    """This route calls method, that visualise time series stored in file.
-
-    Currently supported file formats are: *.csv.
-    Body of this request should have following structure:
-    {
-        "file_name" - <str> - name of file to analyse.
-    }
-    """
-    return controller.time_series_visualisation(parameters=request.get_json())
+    return controller.analysis(file_path=file_path)
 
 
 @APP.route("/forecast/ar", methods=["POST"])

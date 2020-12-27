@@ -43,16 +43,45 @@ def upload_file(request: Request) -> str:
         return file_path
 
 
-def time_series_analysis(file_path: str):
-    """Returns statistical information of time series included in file 
-    which path is given in 'parameters' variable.
-    
-    Returned response contains information like:
-    - average value
-    - interquartile value
-    - maximum value
-    - minimum value
-    - standard deviation value
+def analysis(file_path: str):
+    """Renders template with statistical information and plots of time series
+    included in file which path is given in 'file_path' argument.
+    """
+    try:
+
+        # dictionary that will contains all data for rendering
+        data = {}
+
+        # loads content of file
+        data_file = FileManager.read_file(file_name=file_path)
+
+        # creation of TimeSeries object
+        file_name = os.path.split(file_path)[-1].split(".")[0]
+        time_series = TimeSeries(dataset=data_file, name=file_name)
+        data["analyse"] = time_series.info
+
+        # visualisation of created time series
+        plots = visualisation(file_path=file_path)
+        if plots:
+            data["plots"] = plots
+
+    except Exception:
+        app.logging.error(f"analysis() ERROR \n{traceback.format_exc()}")
+        return render_template("500.html")
+    else:
+        app.logging.info(f"'{time_series.name}' time series analysis.")
+        app.logging.info(time_series.info)
+        return render_template("analysis.html", data=data)
+
+
+def visualisation(file_path: str) -> list:
+    """Plots time series included in file which path is given in 'file_path' argument.
+
+    This method creates three types of plots:
+    1. normal plot - that visualise time series course.
+    2. autocorelation plot - visualise correlation between original and lagged time series.
+    3. histogram - visualise histogram of time series values column.
+    All created plots are saved to data directory.
     """
     try:
 
@@ -60,70 +89,23 @@ def time_series_analysis(file_path: str):
         data_file = FileManager.read_file(file_name=file_path)
 
         # creation of TimeSeries object
-        time_series = TimeSeries(dataset=data_file, name="test")
-
-    except Exception:
-        app.logging.error(f"time_series_analysis() ERROR \n{traceback.format_exc()}")
-        return jsonify({
-                "data": {},
-                "info": "time series analysis error!",
-                "success": False
-            }), 200
-    else:
-        app.logging.info(f"'{time_series.name}' time series analysis.")
-        app.logging.info(time_series.info)
-        return render_template("analysis.html", data=time_series.info)
-
-
-def time_series_visualisation(parameters: dict):
-    """Plots time series included in file which path is given in 'parameters' argument.j
-
-    This method creates three types of plots:
-    1. normal plot - that visualise time series course.
-    2. autocorelation plot - visualise correlation between original and lagged time series.
-    3. histogram - visualise histogram of time series values column.
-    """
-    try:
-
-        # checks if there is 'file_name' field in received dictionary
-        if not "file_name" in parameters:
-            app.logging.error("parameter 'file_name' is missing")
-            return jsonify({
-                    "data": {},
-                    "info": "parameter 'file_name' is missing"
-                }), 400
-        else:
-            file_name = parameters.get("file_name")
-
-        # loads content of file
-        data_file = FileManager.read_file(file_name=file_name)
-
-        # creation of TimeSeries object
-        name = file_name.split(".")[0]
-        time_series = TimeSeries(dataset=data_file, name=name)
+        file_name = os.path.split(file_path)[-1].split(".")[0]
+        time_series = TimeSeries(dataset=data_file, name=file_name)
 
         # drawing plots and saving them to files
-        time_series.draw()
-        time_series.draw_autocorelation(lags=100)
-        time_series.draw_histogram()
+        plots = []
+        plots.append(time_series.draw())
+        plots.append(time_series.draw_autocorelation(lags=100))
+        plots.append(time_series.draw_histogram())
 
         # clearing matplotlib plot
         plt.clf()
 
     except Exception:
-        app.logging.error(f"time_series_visualisation() ERROR \n{traceback.format_exc()}")
-        return jsonify({
-                "data": {},
-                "info": "time series visualisation error!",
-                "success": False
-            }), 200
+        app.logging.error(f"visualisation() ERROR \n{traceback.format_exc()}")
+        return []
     else:
-        app.logging.info("")
-        return jsonify({
-                "data": {},
-                "info": "",
-                "success": True
-            }), 200
+        return plots
 
 
 def time_series_forecast_ar(parameters: dict):

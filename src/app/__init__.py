@@ -26,7 +26,7 @@ API = flask_restful.Api(APP)
 
 
 # application file upload folder configuration
-APP.config["UPLOAD_FOLDER"] = config.DATA_DIR
+APP.config["UPLOAD_FOLDER"] = config.STATIC_DIR
 
 
 # application secret key
