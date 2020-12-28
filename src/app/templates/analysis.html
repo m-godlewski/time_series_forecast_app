@@ -2,12 +2,72 @@
 
 {% block content %}
 
-<p>{{data.analyse}}</p>
-</br>
+<div class="container-fluid">
 
-{% for plot in data.plots %} 
-  <img width="400px" height="200px" src="/static/{{plot}}">
-  </br>
-{% endfor %} 
+  <div class="row">
+
+    <div class="w-50">
+
+      <div class="pl-5 pt-5">
+
+        <h3 class="pb-3"><b>Statistical data</b></h3>
+
+        <table class="table">
+          <tbody>
+            <tr>
+              <td>Minimum value</td>
+              <td>{{data.analyse.minimum_value}}</td>
+            </tr>
+            <tr>
+              <td>Maximum value</td>
+              <td>{{data.analyse.maximum_value}}</td>
+            </tr>
+            <tr>
+              <td>Average value</td>
+              <td>{{data.analyse.average_value}}</td>
+            </tr>
+            <tr>
+              <td>Standard deviation value</td>
+              <td>{{data.analyse.standard_deviation_value}}</td>
+            </tr>
+            <tr>
+              <td>Interquartile value</td>
+              <td>{{data.analyse.interquartile_value}}</td>
+            </tr>
+          </tbody>
+        </table>
+
+      </div>
+
+      <div class="pl-5 pt-5">
+
+        <h3 class="pb-3"><b>Forecasting</b></h3>
+
+        <form action="/forecast/ar" method="get">
+          <button type="submit" formmethod="post" class="btn btn-primary text-white">AR</button>
+        </form>
+
+      </div>
+
+    </div>
+
+    <div class="w-50 pb-5">
+
+      <div class="pl-5 pt-5">
+
+        <center><h3 class="pb-3"><b>Time Series Plots</b></h3></center>
+
+        {% for plot in data.plots %} 
+          <img class="rounded mx-auto d-block" width="70%" src="/static/{{plot}}">
+          </br>
+        {% endfor %} 
+
+      </div>
+
+    </div>
+
+  </div>
+  
+</div>
 
 {% endblock  %}

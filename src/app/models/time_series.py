@@ -55,11 +55,11 @@ class TimeSeries:
     def info(self) -> dict:
         """Returns all properties of TimeSeries object."""
         return {
-            "minimum value": self.min_value,
-            "maximum value": self.max_value,
-            "average value": self.average_value,
-            "standard deviation value": self.std_deviation_value,
-            "interquartile value": self.interquartile_value,
+            "minimum_value": self.min_value,
+            "maximum_value": self.max_value,
+            "average_value": self.average_value,
+            "standard_deviation_value": self.std_deviation_value,
+            "interquartile_value": self.interquartile_value,
         }
 
     @property
