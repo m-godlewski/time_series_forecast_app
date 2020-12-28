@@ -2,7 +2,6 @@ import flask
 import flask_restful
 import logging
 import logging.config
-import os
 import warnings
 import yaml
 
@@ -30,7 +29,7 @@ APP.config["UPLOAD_FOLDER"] = config.STATIC_DIR
 
 
 # application secret key
-APP.secret_key = os.urandom(24)
+APP.secret_key = "5b0a1a0d6f2a4fbc9f1d9a8bb8ed638f"
 
 
 from app import routes

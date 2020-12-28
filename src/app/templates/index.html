@@ -2,6 +2,7 @@
 
 {% block content %}
 
+    <!-- uploading file form -->
     <div class="row justify-content-center h-100">
         <form action = "http://localhost:5000/upload" method = "POST" enctype = "multipart/form-data">
             <input id = "fileInput" type = "file" name = "file" accept = ".csv"/>
@@ -9,6 +10,7 @@
         </form>
     </div>
 
+    <!-- JS script, that prevents pressing upload, where there is no file choosen -->
     <script>
         document.getElementById("fileInput").onchange = function() {
             if(this.value) {

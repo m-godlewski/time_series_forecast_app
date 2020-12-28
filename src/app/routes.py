@@ -25,6 +25,7 @@ def upload():
     """This route is called by file uploading form at home page.
     After successful file uploading, this method redirects to 'analysis' endpoint.
     """
+
     # calling upload file method, that returns absolute path to uploaded file
     file_path = controller.upload_file(request=request)
 
@@ -38,6 +39,7 @@ def upload():
 @APP.route("/analysis", methods=["POST"])
 def analysis():
     """This route calls method that analyse and visualise time series stored in file."""
+
     # retrieving path to file from session
     file_path = session["file_path"]
 
@@ -45,22 +47,19 @@ def analysis():
     return controller.analysis(file_path=file_path)
 
 
-@APP.route("/forecast/ar", methods=["POST"])
+@APP.route("/ar", methods=["POST"])
 def forecast_ar():
-    """This route calls method that forecast future value of time series
-    stored in file, by using auto regression model.
+    """This route calls method that forecast future values of time series
+    stored in file, by using auto regression model."""
 
-    Currently supported file formats are: *.csv.
-    Body of this request should have following structure:
-    {
-        "file_name" - <str> - name of file to analyse.
-        "split_raio" - <float> - ratio of train/test dataset split.
-    }
-    """
-    return controller.time_series_forecast_ar(parameters=request.get_json())
+    # retrieving path to file from session
+    file_path = session["file_path"]
 
+    # retrieving parameters from form
+    parameters = {}
+    for key, value in request.form.items():
+        if value:
+            parameters[key] = value
 
-@APP.route("/forecast/arima", methods=["POST"])
-def forecast_arima():
-    """"""
-    return controller.time_series_forecast_arima()
+    # calling AR forecasting method
+    return controller.forecast_ar(file_path=file_path, parameters=parameters)

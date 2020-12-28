@@ -2,72 +2,110 @@
 
 {% block content %}
 
-<div class="container-fluid">
+  <!-- main container -->
+  <div class="container-fluid">
 
-  <div class="row">
+    <div class="row">
 
-    <div class="w-50">
+      <!-- left column -->
+      <div class="w-50 pb-5">
 
-      <div class="pl-5 pt-5">
+        <!-- statistical data section -->
+        <div class="pl-5 pt-5">
 
-        <h3 class="pb-3"><b>Statistical data</b></h3>
+          <h3 class="pb-3"><b>Statistical data</b></h3>
 
-        <table class="table">
-          <tbody>
-            <tr>
-              <td>Minimum value</td>
-              <td>{{data.analyse.minimum_value}}</td>
-            </tr>
-            <tr>
-              <td>Maximum value</td>
-              <td>{{data.analyse.maximum_value}}</td>
-            </tr>
-            <tr>
-              <td>Average value</td>
-              <td>{{data.analyse.average_value}}</td>
-            </tr>
-            <tr>
-              <td>Standard deviation value</td>
-              <td>{{data.analyse.standard_deviation_value}}</td>
-            </tr>
-            <tr>
-              <td>Interquartile value</td>
-              <td>{{data.analyse.interquartile_value}}</td>
-            </tr>
-          </tbody>
-        </table>
+          <table class="table">
+            <tbody>
+              <tr>
+                <td>Minimum value</td>
+                <td>{{data.analyse.minimum_value}}</td>
+              </tr>
+              <tr>
+                <td>Maximum value</td>
+                <td>{{data.analyse.maximum_value}}</td>
+              </tr>
+              <tr>
+                <td>Average value</td>
+                <td>{{data.analyse.average_value}}</td>
+              </tr>
+              <tr>
+                <td>Standard deviation value</td>
+                <td>{{data.analyse.standard_deviation_value}}</td>
+              </tr>
+              <tr>
+                <td>Interquartile value</td>
+                <td>{{data.analyse.interquartile_value}}</td>
+              </tr>
+            </tbody>
+          </table>
+
+        </div>
+
+        <!-- forecasting section -->
+        <div class="pl-5 pt-5">
+
+          <h3 class="pb-3"><b>Forecasting</b></h3>
+
+          <!-- AR -->
+          <center><h5>Autoregression</h5></center>
+          <form action="/ar" method="POST">
+
+            <!-- dataset split ratio value -->
+            <input name="split_ratio" type="text" placeholder="Dataset split ratio (0.8 as default)" class="form-control" pattern="^\d*(\.\d{0,2})?$">
+
+            <!-- ic method select -->
+            <select name="ar_ic" class="form-control">
+              <option value="" disabled selected>Criterion used for selecting the optimal lag length</option>
+              <option value="aic">Akaike Information Criterion</option>
+              <option value="bic">Bayes Information Criterion</option>
+              <option value="t-stat">Based on last lag</option>
+              <option value="hqic">Hannan-Quinn Information Criterion</option>
+            </select>
+
+            <!-- submit button -->
+            <button type="submit" formmethod="post" class="btn btn-primary text-white form-control">Forecast</button>
+
+          </form>
+
+          <br/>
+          <br/>
+          <br/>
+
+          <!-- ARIMA -->
+          <center><h5>ARIMA</h5></center>
+          <form action="/ar" method="POST">
+
+            <!-- dataset split ratio value -->
+            <input name="split_ratio" type="text" placeholder="Dataset split ratio (0.8 as default)" class="form-control" pattern="^\d*(\.\d{0,2})?$">
+
+            <!-- submit button -->
+            <button type="submit" formmethod="post" class="btn btn-primary text-white form-control">Forecast</button>
+
+          </form>
+
+        </div>
 
       </div>
 
-      <div class="pl-5 pt-5">
+      <!-- right column -->
+      <div class="w-50 pb-5">
 
-        <h3 class="pb-3"><b>Forecasting</b></h3>
+        <div class="pl-5 pt-5">
 
-        <form action="/forecast/ar" method="get">
-          <button type="submit" formmethod="post" class="btn btn-primary text-white">AR</button>
-        </form>
+          <center><h3 class="pb-3"><b>Visualisations</b></h3></center>
+
+          {% for plot in data.plots %} 
+            <img class="rounded mx-auto d-block" width="70%" src="/static/{{plot}}">
+            </br>
+          {% endfor %} 
+
+        </div>
 
       </div>
 
     </div>
-
-    <div class="w-50 pb-5">
-
-      <div class="pl-5 pt-5">
-
-        <center><h3 class="pb-3"><b>Time Series Plots</b></h3></center>
-
-        {% for plot in data.plots %} 
-          <img class="rounded mx-auto d-block" width="70%" src="/static/{{plot}}">
-          </br>
-        {% endfor %} 
-
-      </div>
-
-    </div>
-
+    
   </div>
-  
-</div>
 
 {% endblock  %}
