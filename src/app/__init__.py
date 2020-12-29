@@ -32,5 +32,9 @@ APP.config["UPLOAD_FOLDER"] = config.STATIC_DIR
 APP.secret_key = "5b0a1a0d6f2a4fbc9f1d9a8bb8ed638f"
 
 
+# disabling image caching
+APP.config["SEND_FILE_MAX_AGE_DEFAULT"] = 0
+
+
 from app import routes
 from app import errors

@@ -2,6 +2,42 @@
 
 {% block content %}
 
-    <img class="rounded mx-auto d-block" width="40%" src="/static/{{data.forecast_plot}}">
+<!-- main container -->
+<div class="container-fluid">
 
-{% endblock  %}
+    <!-- Visualisation of results -->
+    <center><h3><b>Forecast Results</b></h3></center>
+
+    <div class="row">
+
+        <!-- left column -->
+        <div class="w-50 pb-5 pt-3">
+            <img class="rounded mx-auto d-block" width="70%" src="/static/{{data.forecast_plot}}">
+        </div>
+
+        <!-- right column -->
+        <div class="w-50 pb-5 pt-5">
+            <!-- results -->
+            <table class="table">
+                <tbody>
+                  <tr>
+                    <td>Lag length</td>
+                    <td>{{data.lag}}</td>
+                  </tr>
+                  <tr>
+                    <td>Number of trained observations</td>
+                    <td>{{data.tobs}}</td>
+                  </tr>
+                  <tr>
+                    <td>RMSE - root-mean-square error</td>
+                    <td>{{data.rmse}}</td>
+                  </tr>
+                </tbody>
+              </table>
+        </div>
+
+    </div>
+
+</div>
+
+{% endblock  %}z

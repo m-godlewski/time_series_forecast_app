@@ -2,11 +2,16 @@
 
 {% block content %}
 
+<!-- main container -->
+<div class="container-fluid">
+
+    <center><h3 class="pb-5">Upload Time Series File</h3></center>
+
     <!-- uploading file form -->
     <div class="row justify-content-center h-100">
         <form action = "http://localhost:5000/upload" method = "POST" enctype = "multipart/form-data">
-            <input id = "fileInput" type = "file" name = "file" accept = ".csv"/>
-            <input id = "submitFile" type = "submit"/ disabled>
+            <input class="form-control-file" id = "fileInput" type = "file" name = "file" accept = ".csv"/ style='width:30em'>
+            <input class="form-control mt-3 btn-info" id = "submitFile" type = "submit"/ disabled>
         </form>
     </div>
 
@@ -18,5 +23,7 @@
             }  
         }
     </script>
+
+</div>
 
 {% endblock  %}

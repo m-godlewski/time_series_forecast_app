@@ -63,3 +63,21 @@ def forecast_ar():
 
     # calling AR forecasting method
     return controller.forecast_ar(file_path=file_path, parameters=parameters)
+
+
+@APP.route("/arima", methods=["POST"])
+def forecast_arima():
+    """This route calls method that forecast future values of time series
+    stored in file, by using ARIMA model."""
+
+    # retrieving path to file from session
+    file_path = session["file_path"]
+
+    # retrieving parameters from form
+    parameters = {}
+    for key, value in request.form.items():
+        if value:
+            parameters[key] = value
+
+    # calling ARIMA forecasting method
+    return controller.forecast_arima(file_path=file_path, parameters=parameters)

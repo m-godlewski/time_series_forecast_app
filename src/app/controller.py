@@ -5,11 +5,14 @@ warnings.filterwarnings('ignore', 'statsmodels.tsa.ar_model.AR', FutureWarning)
 
 import numpy as np
 import matplotlib.pyplot as plt
+from math import sqrt
 from flask import jsonify
 from flask import Request
 from flask import render_template
-from werkzeug.utils import secure_filename
+from sklearn.metrics import mean_squared_error
 from statsmodels.tsa.ar_model import AR
+from statsmodels.tsa.arima_model import ARIMA
+from werkzeug.utils import secure_filename
 
 import app
 import config
@@ -123,8 +126,8 @@ def forecast_ar(file_path: str, parameters: dict):
     """
     try:
 
-        app.logging.info("time series forecasting!")
-        app.logging.info(parameters)
+        app.logging.info("time series forecasting using AR")
+        app.logging.info(f"parameters = {parameters}")
 
         # dictionary that will contains all data for rendering
         data = {}
@@ -151,15 +154,80 @@ def forecast_ar(file_path: str, parameters: dict):
 
         # forecast range
         start = len(train_data)
-        end = start + len(test_data)
+        end = start + len(test_data) - 1
 
         # forecasting
         forecast_results = trained_model.predict(start=start, end=end)
 
+        # RMSE - root-mean-square error
+        rmse = sqrt(mean_squared_error(test_data, forecast_results))
+
         # plotting forecasting results and saving to file
         plt.plot(test_data, color="blue")   # plotting real values
         plt.plot(forecast_results, color='red') # plotting predicted values
-        plot_name = f"{time_series.name}_forecast.png"  # name of plotted file
+        plot_name = f"{time_series.name}_forecast_ar.png"  # name of plotted file
+        plot_path = os.path.join(config.STATIC_DIR, plot_name)  # plotted file path
+        plt.savefig(plot_path)  # saving plot to file
+
+        # clearing matplotlib plot
+        plt.clf()
+
+        data["forecast_plot"] = plot_name
+        data["lag"] = trained_model.k_ar
+        data["tobs"] = trained_model.n_totobs
+        data["rmse"] = rmse
+
+    except Exception:
+        app.logging.error(f"time_series_forecast_ar() ERROR \n{traceback.format_exc()}")
+        return render_template("500.html")
+    else:
+        app.logging.info(f"time series '{file_name}' forecasted successfully!")
+        return render_template("ar.html", data=data)
+
+
+def forecast_arima(file_path: str, parameters: dict):
+    """
+    """
+    try:
+
+        app.logging.info("time series forecasting using ARIMA")
+        app.logging.info(parameters)
+
+        # dictionary that will contains all data for rendering
+        data = {}
+
+        # preparing parameters
+        data["split_ratio"] = float(parameters.get("split_ratio", 0.8))
+        data["ar"] = int(parameters.get("arima_ar", 10))
+        data["i"] = int(parameters.get("arima_i", 1))
+        data["ma"] = int(parameters.get("arima_ma", 2))
+
+        # loads content of file
+        data_file = FileManager.read_file(file_name=file_path)
+
+        # creation of TimeSeries object
+        file_name = os.path.split(file_path)[-1].split(".")[0]
+        time_series = TimeSeries(dataset=data_file, name=file_name)
+
+        # split time series to train and test datasets
+        train_data, test_data = time_series.split(ratio=data["split_ratio"])
+
+        # creation of ARIMA model
+        model = ARIMA(train_data, order = (2, 0, 4))
+
+        # ARIMA model training
+        trained_model = model.fit()
+
+        # forecast range
+        steps = len(test_data)
+
+        # forecasting
+        forecast_results = trained_model.forecast(steps=steps)[0]
+
+        # plotting forecasting results and saving to file
+        plt.plot(test_data, color="blue")   # plotting real values
+        plt.plot(forecast_results, color='red') # plotting predicted values
+        plot_name = f"{time_series.name}_forecast_arima.png"  # name of plotted file
         plot_path = os.path.join(config.STATIC_DIR, plot_name)  # plotted file path
         plt.savefig(plot_path)  # saving plot to file
 
@@ -169,8 +237,8 @@ def forecast_ar(file_path: str, parameters: dict):
         data["forecast_plot"] = plot_name
 
     except Exception:
-        app.logging.error(f"time_series_forecast_ar() ERROR \n{traceback.format_exc()}")
+        app.logging.error(f"forecast_arima() ERROR \n{traceback.format_exc()}")
         return render_template("500.html")
     else:
         app.logging.info(f"time series '{file_name}' forecasted successfully!")
-        return render_template("ar.html", data=data)
+        return render_template("arima.html", data=data)
