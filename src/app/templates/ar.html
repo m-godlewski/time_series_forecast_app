@@ -6,7 +6,7 @@
 <div class="container-fluid">
 
     <!-- Visualisation of results -->
-    <center><h3><b>Forecast Results</b></h3></center>
+    <center><h3><b>Autoregression Forecast Results</b></h3></center>
 
     <div class="row">
 
@@ -20,6 +20,10 @@
             <!-- results -->
             <table class="table">
                 <tbody>
+                  <tr>
+                    <td>Criterion used for selecting the optimal lag length.</td>
+                    <td>{{data.ic}}</td>
+                  </tr>
                   <tr>
                     <td>Lag length</td>
                     <td>{{data.lag}}</td>

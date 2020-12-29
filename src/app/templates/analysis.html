@@ -52,7 +52,7 @@
           <form action="/ar" method="POST">
 
             <!-- dataset split ratio value -->
-            <input name="split_ratio" type="text" placeholder="Dataset split ratio (0.8 as default)" class="form-control" pattern="^\d*(\.\d{0,2})?$">
+            <input name="split_ratio" type="text" placeholder="Dataset split ratio (default = 0.8)" class="form-control" pattern="^\d*(\.\d{0,2})?$">
 
             <!-- ic method select -->
             <select name="ar_ic" class="form-control">
@@ -80,13 +80,13 @@
             <input name="split_ratio" type="text" placeholder="Dataset split ratio (0.8 as default)" class="form-control" pattern="^\d*(\.\d{0,2})?$">
 
             <!-- AR -->
-            <input name="arima_ar" type="text" placeholder="AR" class="form-control">
+            <input name="arima_ar" type="text" placeholder="AR (default = 10)" class="form-control">
 
             <!-- I -->
-            <input name="arima_i" type="text" placeholder="I" class="form-control">
+            <input name="arima_i" type="text" placeholder="I (default = 1)" class="form-control">
 
             <!-- MA -->
-            <input name="arima_ma" type="text" placeholder="MA" class="form-control">
+            <input name="arima_ma" type="text" placeholder="MA (default = 2)" class="form-control">
 
             <!-- submit button -->
             <button type="submit" formmethod="post" class="btn btn-primary text-white form-control">Forecast</button>

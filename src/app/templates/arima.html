@@ -2,6 +2,58 @@
 
 {% block content %}
 
-    <img class="rounded mx-auto d-block" width="40%" src="/static/{{data.forecast_plot}}">
+<!-- main container -->
+<div class="container-fluid">
 
-{% endblock  %}
+    <!-- Visualisation of results -->
+    <center><h3><b>ARIMA Forecast Results</b></h3></center>
+
+    <div class="row">
+
+        <!-- left column -->
+        <div class="w-50 pb-5 pt-3">
+            <img class="rounded mx-auto d-block" width="70%" src="/static/{{data.forecast_plot}}">
+        </div>
+
+        <!-- right column -->
+        <div class="w-50 pb-5 pt-5">
+            <!-- results -->
+            <table class="table">
+                <tbody>
+                  <tr>
+                    <td>Number of trained observations</td>
+                    <td>{{data.tobs}}</td>
+                  </tr>
+                  <tr>
+                    <td>AR</td>
+                    <td>{{data.ar}}</td>
+                  </tr>
+                  <tr>
+                    <td>I</td>
+                    <td>{{data.i}}</td>
+                  </tr>
+                  <tr>
+                    <td>MA</td>
+                    <td>{{data.ma}}</td>
+                  </tr>
+                  <tr>
+                    <td>AIC - Akaike Information Criterion</td>
+                    <td>{{data.aic}}</td>
+                  </tr>
+                  <tr>
+                    <td>BIC - Bayesian Information Criterion</td>
+                    <td>{{data.bic}}</td>
+                  </tr>
+                  <tr>
+                    <td>HQIC - Hannan–Quinn Information Criterion</td>
+                    <td>{{data.hqic}}</td>
+                  </tr>
+                </tbody>
+              </table>
+        </div>
+
+    </div>
+
+</div>
+
+{% endblock  %}z

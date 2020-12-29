@@ -20,6 +20,15 @@ from app.models.time_series import TimeSeries
 from app.utills.file_manager import FileManager
 
 
+# optimal lag length selection criteria
+IC_METHODS = {
+    "aic": "Akaike Information Criterion",
+    "bic": "Bayes Information Criterion",
+    "t-stat": "Based on last lag",
+    "hqic": "Hannan-Quinn Information Criterion"
+}
+
+
 def home_page():
     """Renders home page."""
     return render_template("index.html")
@@ -172,16 +181,18 @@ def forecast_ar(file_path: str, parameters: dict):
         # clearing matplotlib plot
         plt.clf()
 
+        # preparing data for template rendering
         data["forecast_plot"] = plot_name
         data["lag"] = trained_model.k_ar
         data["tobs"] = trained_model.n_totobs
         data["rmse"] = rmse
+        data["ic"] = IC_METHODS[data["ic"]]
 
     except Exception:
         app.logging.error(f"time_series_forecast_ar() ERROR \n{traceback.format_exc()}")
         return render_template("500.html")
     else:
-        app.logging.info(f"time series '{file_name}' forecasted successfully!")
+        app.logging.info(f"time series '{file_name}' forecasted successfully using AR!")
         return render_template("ar.html", data=data)
 
 
@@ -213,7 +224,14 @@ def forecast_arima(file_path: str, parameters: dict):
         train_data, test_data = time_series.split(ratio=data["split_ratio"])
 
         # creation of ARIMA model
-        model = ARIMA(train_data, order = (2, 0, 4))
+        model = ARIMA(
+            train_data,
+            order = (
+                data["ar"],
+                data["i"],
+                data["ma"]
+                )
+        )
 
         # ARIMA model training
         trained_model = model.fit()
@@ -234,11 +252,16 @@ def forecast_arima(file_path: str, parameters: dict):
         # clearing matplotlib plot
         plt.clf()
 
+        # preparing data for template rendering
         data["forecast_plot"] = plot_name
+        data["tobs"] = trained_model.n_totobs
+        data["aic"] = trained_model.aic
+        data["bic"] = trained_model.bic
+        data["hqic"] = trained_model.hqic
 
     except Exception:
         app.logging.error(f"forecast_arima() ERROR \n{traceback.format_exc()}")
         return render_template("500.html")
     else:
-        app.logging.info(f"time series '{file_name}' forecasted successfully!")
+        app.logging.info(f"time series '{file_name}' forecasted successfully using ARIMA!")
         return render_template("arima.html", data=data)
