@@ -11,6 +11,7 @@ import config
 
 # disabling startup warnings
 warnings.filterwarnings('ignore')
+warnings.filterwarnings('ignore', 'statsmodels.tsa.ar_model.AR', FutureWarning)
 mpl_logger = logging.getLogger("matplotlib")
 mpl_logger.setLevel(logging.ERROR)
 

@@ -50,7 +50,7 @@ def analysis():
 @APP.route("/ar", methods=["POST"])
 def forecast_ar():
     """This route calls method that forecast future values of time series
-    stored in file, by using auto regression model."""
+    stored in file, using auto regression model."""
 
     # retrieving path to file from session
     file_path = session["file_path"]
@@ -68,7 +68,7 @@ def forecast_ar():
 @APP.route("/arima", methods=["POST"])
 def forecast_arima():
     """This route calls method that forecast future values of time series
-    stored in file, by using ARIMA model."""
+    stored in file, using ARIMA model."""
 
     # retrieving path to file from session
     file_path = session["file_path"]

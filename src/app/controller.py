@@ -1,12 +1,15 @@
+"""
+Contoller file.
+
+This file contains all methods that are called by route.py file.
+"""
+
+
 import os
 import traceback
-import warnings
-warnings.filterwarnings('ignore', 'statsmodels.tsa.ar_model.AR', FutureWarning)
 
-import numpy as np
 import matplotlib.pyplot as plt
 from math import sqrt
-from flask import jsonify
 from flask import Request
 from flask import render_template
 from sklearn.metrics import mean_squared_error
@@ -124,14 +127,16 @@ def visualisation(file_path: str) -> list:
 
 def forecast_ar(file_path: str, parameters: dict):
     """Trains and tests autoregressive model by using time series included in file,
-    which path is given by 'parameters' argument, and renders forecast results.
+    which path is given by 'file_path' argument, and renders forecast results.
 
     In first step, contents of file from given path is loaded.
     Base of loaded file content, TimeSeries class object is created.
-    Before model trainin, time series is splitted to train and test subsetest
+    Before model training, time series is splitted to train and test subsetest
     basing on given by 'parameters' argument value.
     Train subset is used for model training, test subset, for testing model accuracy.
+    Model is trained base on received from HTML form parameters.
     After model training and test forecasting, results are plotted and saved to file.
+    At the end, this method renders template with forecast results plot, and its parameters.
     """
     try:
 
@@ -197,7 +202,17 @@ def forecast_ar(file_path: str, parameters: dict):
 
 
 def forecast_arima(file_path: str, parameters: dict):
-    """
+    """Trains and tests ARIMA model by using time series included in file,
+    which path is given by 'file_path' argument, and renders forecast results.
+
+    In first step, contents of file from given path is loaded.
+    Base of loaded file content, TimeSeries class object is created.
+    Before model training, time series is splitted to train and test subsetest
+    basing on given by 'parameters' argument value.
+    Train subset is used for model training, test subset, for testing model accuracy.
+    Model is trained base on received from HTML form parameters.
+    After model training and test forecasting, results are plotted and saved to file.
+    At the end, this method renders template with forecast results plot, and its parameters.
     """
     try:
 
