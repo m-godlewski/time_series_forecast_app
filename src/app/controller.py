@@ -177,8 +177,9 @@ def forecast_ar(file_path: str, parameters: dict):
         rmse = sqrt(mean_squared_error(test_data, forecast_results))
 
         # plotting forecasting results and saving to file
-        plt.plot(test_data, color="blue")   # plotting real values
-        plt.plot(forecast_results, color='red') # plotting predicted values
+        plt.plot(test_data, color="blue", label="real")   # plotting real values
+        plt.plot(forecast_results, color="red", label="predicted") # plotting predicted values
+        plt.legend(loc="upper right")
         plot_name = f"{time_series.name}_forecast_ar.png"  # name of plotted file
         plot_path = os.path.join(config.STATIC_DIR, plot_name)  # plotted file path
         plt.savefig(plot_path)  # saving plot to file
@@ -258,8 +259,9 @@ def forecast_arima(file_path: str, parameters: dict):
         forecast_results = trained_model.forecast(steps=steps)[0]
 
         # plotting forecasting results and saving to file
-        plt.plot(test_data, color="blue")   # plotting real values
-        plt.plot(forecast_results, color='red') # plotting predicted values
+        plt.plot(test_data, color="blue", label="real")   # plotting real values
+        plt.plot(forecast_results, color="red", label="predicted") # plotting predicted values
+        plt.legend(loc="upper right")
         plot_name = f"{time_series.name}_forecast_arima.png"  # name of plotted file
         plot_path = os.path.join(config.STATIC_DIR, plot_name)  # plotted file path
         plt.savefig(plot_path)  # saving plot to file
