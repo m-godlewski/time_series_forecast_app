@@ -179,7 +179,7 @@ def forecast_ar(file_path: str, parameters: dict):
         plt.plot(test_data, color="blue", label="real")   # plotting real values
         plt.plot(forecast_results, color="red", label="predicted") # plotting predicted values
         plt.legend(loc="upper right")
-        plot_name = f"{time_series.name}_forecast_ar.png"  # name of plotted file
+        plot_name = f"{time_series.name}_forecast_ar_{data['ic']}_{data['split_ratio']}.png"  # name of plotted file
         plot_path = os.path.join(config.STATIC_DIR, plot_name)  # plotted file path
         plt.savefig(plot_path)  # saving plot to file
 
