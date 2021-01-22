@@ -27,7 +27,6 @@ from app.utills.file_manager import FileManager
 IC_METHODS = {
     "aic": "Akaike Information Criterion",
     "bic": "Bayes Information Criterion",
-    "t-stat": "Based on last lag",
     "hqic": "Hannan-Quinn Information Criterion"
 }
 
