@@ -5,6 +5,7 @@ This file contains all methods that are called by route.py file.
 """
 
 
+import itertools
 import os
 import traceback
 
@@ -199,6 +200,94 @@ def forecast_ar(file_path: str, parameters: dict):
     else:
         app.logging.info(f"time series '{file_name}' forecasted successfully using AR!")
         return render_template("ar.html", data=data)
+
+
+def forecast_arima_test_params(file_path: str, parameters: dict):
+    """This method tests ARIMA model accuracy, by comparing values of information criteria.
+    
+    All methods are tested by combination of AR, I and MA parameters in range from 1 to 10.
+    Combination, that have best information criteria value (lower is better),
+    will be returned and rendered as this method results template.
+    """
+    try:
+
+        # dictionary that will contains all data for rendering
+        data = {}
+
+        # preparing parameters
+        data["split_ratio"] = float(parameters.get("split_ratio", 0.8))
+
+        # loads content of file
+        data_file = FileManager.read_file(file_name=file_path)
+
+        # creation of TimeSeries object
+        file_name = os.path.split(file_path)[-1].split(".")[0]
+        time_series = TimeSeries(dataset=data_file, name=file_name)
+
+        # split time series to train and test datasets
+        train_data, test_data = time_series.split(ratio=data["split_ratio"])
+
+        # creation of three lists with values from 1 to 10
+        ar=i=ma=range(0,3)
+        arima = list(itertools.product(ar,i,ma))
+
+        # initialization of variables that stores best criteria values and parameters
+        best_aic = {
+            "value": 1000000,
+            "parameters": ""
+        }
+        best_bic = {
+            "value": 1000000,
+            "parameters": ""
+        }
+        best_hqic = {
+            "value": 1000000,
+            "parameters": ""
+        }
+
+        # iteration over all parameters combination
+        for param in arima:
+            try:
+
+                # creation of ARIMA model
+                arima_model = ARIMA(train_data, order=param)
+
+                # ARIMA model training
+                arima_model_fit = arima_model.fit()
+
+                # current model criteria values
+                aic = arima_model_fit.aic
+                bic = arima_model_fit.bic
+                hqic = arima_model_fit.hqic
+
+                # comparing current iteration criteria values with best values
+                if aic < best_aic["value"]:
+                    best_aic["value"] = aic
+                    best_aic["parameters"] = param
+
+                if bic < best_bic["value"]:
+                    best_bic["value"] = bic
+                    best_bic["parameters"] = param
+
+                if hqic < best_hqic["value"]:
+                    best_hqic["value"] = hqic
+                    best_hqic["parameters"] = param
+            except:
+                continue
+
+        # test result
+        results = {
+            "aic": best_aic,
+            "bic": best_bic,
+            "hqic": best_hqic
+        }
+
+    except Exception:
+        app.logging.error(f"time_series_forecast_arima_test_params() ERROR \n{traceback.format_exc()}")
+        return render_template("500.html")
+    else:
+        app.logging.info(f"arima '{file_name}' parameters testing!")
+        return render_template("arima_test_params.html", data=results)
 
 
 def forecast_arima(file_path: str, parameters: dict):
