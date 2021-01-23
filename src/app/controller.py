@@ -205,7 +205,7 @@ def forecast_ar(file_path: str, parameters: dict):
 def forecast_arima_test_params(file_path: str, parameters: dict):
     """This method tests ARIMA model accuracy, by comparing values of information criteria.
     
-    All methods are tested by combination of AR, I and MA parameters in range from 1 to 10.
+    All methods are tested by combination of AR, I and MA parameters in range from 1 to 5.
     Combination, that have best information criteria value (lower is better),
     will be returned and rendered as this method results template.
     """
@@ -228,7 +228,7 @@ def forecast_arima_test_params(file_path: str, parameters: dict):
         train_data, test_data = time_series.split(ratio=data["split_ratio"])
 
         # creation of three lists with values from 1 to 10
-        ar=i=ma=range(0,3)
+        ar=i=ma=range(0,6)
         arima = list(itertools.product(ar,i,ma))
 
         # initialization of variables that stores best criteria values and parameters
@@ -350,7 +350,7 @@ def forecast_arima(file_path: str, parameters: dict):
         plt.plot(test_data, color="blue", label="real")   # plotting real values
         plt.plot(forecast_results, color="red", label="predicted") # plotting predicted values
         plt.legend(loc="upper right")
-        plot_name = f"{time_series.name}_forecast_arima.png"  # name of plotted file
+        plot_name = f"{time_series.name}_forecast_arima_{data['ar']}_{data['i']}_{data['ma']}.png"  # name of plotted file
         plot_path = os.path.join(config.STATIC_DIR, plot_name)  # plotted file path
         plt.savefig(plot_path)  # saving plot to file
 
