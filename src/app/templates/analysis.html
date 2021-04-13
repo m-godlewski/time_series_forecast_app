@@ -48,7 +48,7 @@
           <h3 class="pb-3"><b>Forecasting</b></h3>
 
           <!-- AR -->
-          <center><h5 class="pt-3 pb-3">Autoregression</h5></center>
+          <center><h5 class="pt-3 pb-3"><b>Autoregression</b></h5></center>
           <form action="/ar" method="POST">
 
             <!-- dataset split ratio value -->
@@ -59,7 +59,6 @@
               <!-- <option value="" disabled selected>Criterion used for selecting the optimal lag length</option> -->
               <option value="aic">Akaike Information Criterion</option>
               <option value="bic">Bayes Information Criterion</option>
-              <option value="t-stat">Based on last lag</option>
               <option value="hqic">Hannan-Quinn Information Criterion</option>
             </select>
 
@@ -73,7 +72,7 @@
           <br/>
 
           <!-- ARIMA -->
-          <center><h5 class="pt-3 pb-3">ARIMA</h5></center>
+          <center><h5 class="pt-3 pb-3"><b>ARIMA</b></h5></center>
           <form action="/arima" method="POST">
 
             <!-- dataset split ratio value -->
@@ -91,6 +90,19 @@
             <!-- submit button -->
             <button type="submit" formmethod="post" class="btn btn-primary text-white form-control">Forecast</button>
 
+          </form>
+
+          <br/>
+          <br/>
+
+          <!-- Find Best ARIMA Parameters -->
+          <form action="/arima/params" method="POST">
+
+              <!-- dataset split ratio value -->
+              <input name="split_ratio" type="text" placeholder="Dataset split ratio (0.8 as default)" class="form-control" pattern="^\d*(\.\d{0,2})?$">
+  
+            <!-- submit button -->
+              <button type="submit" formmethod="post" class="btn btn-primary text-white form-control">Find Best Parameters</button>
           </form>
 
         </div>

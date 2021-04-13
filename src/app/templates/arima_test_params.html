@@ -1,0 +1,32 @@
+{% extends "base.html" %}
+
+{% block content %}
+
+  <div class="row justify-content-center h-100">
+    
+    <center><h3><b>ARIMA Parameters Test Results</b></h3></center>
+
+    </br>
+    </br>
+    </br>
+
+    <table class="table">
+      <tbody>
+        <tr>
+          <td>Akaike Information Criterion</td>
+          <td>{{data.aic.parameters}}</td>
+        </tr>
+        <tr>
+          <td>Bayes Information Criterion</td>
+          <td>{{data.aic.parameters}}</td>
+        </tr>
+        <tr>
+          <td>Hannan-Quinn Information Criterion</td>
+          <td>{{data.hqic.parameters}}</td>
+        </tr>
+      </tbody>
+    </table>
+
+  </div>
+
+{% endblock  %}

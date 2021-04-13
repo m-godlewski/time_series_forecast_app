@@ -65,6 +65,23 @@ def forecast_ar():
     return controller.forecast_ar(file_path=file_path, parameters=parameters)
 
 
+@APP.route("/arima/params", methods=["POST"])
+def forecast_arima_test_params():
+    """This route calls method that tests all combination of ARIMA parameters
+    by checking AIC, BIC and HQIC values of trained ARIMA models."""
+
+    # retrieving path to file from session
+    file_path = session["file_path"]
+
+    # retrieving parameters from form
+    parameters = {}
+    for key, value in request.form.items():
+        if value:
+            parameters[key] = value
+
+    return controller.forecast_arima_test_params(file_path=file_path, parameters=parameters)
+
+
 @APP.route("/arima", methods=["POST"])
 def forecast_arima():
     """This route calls method that forecast future values of time series
