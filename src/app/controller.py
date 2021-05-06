@@ -9,10 +9,10 @@ import itertools
 import os
 import traceback
 
-import matplotlib.pyplot as plt
-from math import sqrt
 from flask import Request
 from flask import render_template
+from math import sqrt
+from matplotlib import pyplot as plt
 from sklearn.metrics import mean_squared_error
 from statsmodels.tsa.ar_model import AR
 from statsmodels.tsa.arima_model import ARIMA
@@ -20,8 +20,8 @@ from werkzeug.utils import secure_filename
 
 import app
 import config
-from app.models.time_series import TimeSeries
 from app.utills.file_manager import FileManager
+from app.models.time_series import TimeSeries
 
 
 # optimal lag length selection criteria
@@ -33,25 +33,26 @@ IC_METHODS = {
 
 
 def home_page():
-    """Renders home page."""
+    """Renders home page, the 'index.html' template."""
     return render_template("index.html")
 
 
 def upload_file(request: Request) -> str:
-    """Uploads file received by request, saves it and returns absolute path to this file."""
+    """Uploads file received by request to application data directory, 
+    saves it and returns absolute path to this file."""
     try:
 
         # retrieves file from request
-        f = request.files["file"]
+        _file = request.files["file"]
 
         # absoulte path to file
-        file_path = os.path.join(config.DATA_DIR, secure_filename(f.filename))
+        file_path = os.path.join(config.DATA_DIR, secure_filename(_file.filename))
 
         # saves received file
-        f.save(file_path)
+        _file.save(file_path)
 
     except Exception:
-        app.logging.error(f"upload_file() ERROR \n{traceback.format_exc()}")
+        app.logging.error(f"controller.upload_file() -> {traceback.format_exc()}")
         return ""
     else:
         app.logging.info("file uploaded successfully!")
@@ -200,94 +201,6 @@ def forecast_ar(file_path: str, parameters: dict):
     else:
         app.logging.info(f"time series '{file_name}' forecasted successfully using AR!")
         return render_template("ar.html", data=data)
-
-
-def forecast_arima_test_params(file_path: str, parameters: dict):
-    """This method tests ARIMA model accuracy, by comparing values of information criteria.
-    
-    All methods are tested by combination of AR, I and MA parameters in range from 1 to 5.
-    Combination, that have best information criteria value (lower is better),
-    will be returned and rendered as this method results template.
-    """
-    try:
-
-        # dictionary that will contains all data for rendering
-        data = {}
-
-        # preparing parameters
-        data["split_ratio"] = float(parameters.get("split_ratio", 0.8))
-
-        # loads content of file
-        data_file = FileManager.read_file(file_name=file_path)
-
-        # creation of TimeSeries object
-        file_name = os.path.split(file_path)[-1].split(".")[0]
-        time_series = TimeSeries(dataset=data_file, name=file_name)
-
-        # split time series to train and test datasets
-        train_data, test_data = time_series.split(ratio=data["split_ratio"])
-
-        # creation of three lists with values from 1 to 10
-        ar=i=ma=range(0,6)
-        arima = list(itertools.product(ar,i,ma))
-
-        # initialization of variables that stores best criteria values and parameters
-        best_aic = {
-            "value": 1000000,
-            "parameters": ""
-        }
-        best_bic = {
-            "value": 1000000,
-            "parameters": ""
-        }
-        best_hqic = {
-            "value": 1000000,
-            "parameters": ""
-        }
-
-        # iteration over all parameters combination
-        for param in arima:
-            try:
-
-                # creation of ARIMA model
-                arima_model = ARIMA(train_data, order=param)
-
-                # ARIMA model training
-                arima_model_fit = arima_model.fit()
-
-                # current model criteria values
-                aic = arima_model_fit.aic
-                bic = arima_model_fit.bic
-                hqic = arima_model_fit.hqic
-
-                # comparing current iteration criteria values with best values
-                if aic < best_aic["value"]:
-                    best_aic["value"] = aic
-                    best_aic["parameters"] = param
-
-                if bic < best_bic["value"]:
-                    best_bic["value"] = bic
-                    best_bic["parameters"] = param
-
-                if hqic < best_hqic["value"]:
-                    best_hqic["value"] = hqic
-                    best_hqic["parameters"] = param
-            except:
-                continue
-
-        # test result
-        results = {
-            "aic": best_aic,
-            "bic": best_bic,
-            "hqic": best_hqic
-        }
-
-    except Exception:
-        app.logging.error(f"time_series_forecast_arima_test_params() ERROR \n{traceback.format_exc()}")
-        return render_template("500.html")
-    else:
-        app.logging.info(f"arima '{file_name}' parameters testing!")
-        return render_template("arima_test_params.html", data=results)
 
 
 def forecast_arima(file_path: str, parameters: dict):

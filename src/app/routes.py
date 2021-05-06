@@ -1,7 +1,7 @@
 """
 Main routing file.
 
-This file handling all request to general endpoint.
+This file handling all request to general endpoint and calls selected methods.
 """
 
 
@@ -16,7 +16,7 @@ from app import controller
 
 @APP.route("/", methods=["GET"])
 def home():
-    """This route calls method, that renders home page of APP."""
+    """This route calls method, that renders home page of application."""
     return controller.home_page()
 
 
@@ -26,10 +26,11 @@ def upload():
     After successful file uploading, this method redirects to 'analysis' endpoint.
     """
 
-    # calling upload file method, that returns absolute path to uploaded file
+    # calling upload file method, that uploads file to application server
+    # and returns absolute path to uploaded file
     file_path = controller.upload_file(request=request)
 
-    # adding 'file_path' to sesssion variables
+    # adding 'file_path' to current sesssion variables
     session["file_path"] = file_path
 
     # redirection to analysis endpoints
@@ -63,23 +64,6 @@ def forecast_ar():
 
     # calling AR forecasting method
     return controller.forecast_ar(file_path=file_path, parameters=parameters)
-
-
-@APP.route("/arima/params", methods=["POST"])
-def forecast_arima_test_params():
-    """This route calls method that tests all combination of ARIMA parameters
-    by checking AIC, BIC and HQIC values of trained ARIMA models."""
-
-    # retrieving path to file from session
-    file_path = session["file_path"]
-
-    # retrieving parameters from form
-    parameters = {}
-    for key, value in request.form.items():
-        if value:
-            parameters[key] = value
-
-    return controller.forecast_arima_test_params(file_path=file_path, parameters=parameters)
 
 
 @APP.route("/arima", methods=["POST"])
