@@ -28,18 +28,18 @@ def home_page():
 
 def analysis(file_path: str):
     """Renders template with statistical information and plots of time series
-    included in file which path is given in 'file_path' argument.
+    included in file which path is given by 'file_path' argument.
     """
     try:
 
-        # dictionary that will contains all data for rendering
+        # dictionary that will contain all data for rendering
         data = {}
 
         # loads content of file
         data_file = FileManager.read_file(file_name=file_path)
 
         # creation of TimeSeries object
-        file_name = os.path.split(file_path)[-1].split(".")[0]
+        file_name = FileManager.get_file_name_from_(path=file_path)
         time_series = TimeSeries(dataset=data_file, name=file_name)
         data["analyse"] = time_series.info
 

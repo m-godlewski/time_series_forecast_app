@@ -5,6 +5,7 @@ This script contains FileManager class responsible for managing files in this ap
 """
 
 
+from yaml.tokens import StreamStartToken
 import config
 import os
 import traceback
@@ -54,3 +55,8 @@ class FileManager:
         else:
             app.logging.info("file uploaded successfully!")
             return file_path
+
+    @staticmethod
+    def get_file_name_from_(path: str):
+        """Returns file name, without extension from received absolute path."""
+        return os.path.split(path)[-1].split(".")[0]
