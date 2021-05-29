@@ -12,6 +12,7 @@ from flask import url_for
 
 from app import APP
 from app import controller
+from app.utills.file_manager import FileManager
 
 
 @APP.route("/", methods=["GET"])
@@ -23,12 +24,13 @@ def home():
 @APP.route("/upload", methods=["POST"])
 def upload():
     """This route is called by file uploading form at home page.
+    Calls method, that upload file sended by request to application server storage directory.
     After successful file uploading, this method redirects to 'analysis' endpoint.
     """
 
     # calling upload file method, that uploads file to application server
     # and returns absolute path to uploaded file
-    file_path = controller.upload_file(request=request)
+    file_path = FileManager.upload_file(request=request)
 
     # adding 'file_path' to current sesssion variables
     session["file_path"] = file_path

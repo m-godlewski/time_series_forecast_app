@@ -16,7 +16,6 @@ from matplotlib import pyplot as plt
 from sklearn.metrics import mean_squared_error
 from statsmodels.tsa.ar_model import AR
 from statsmodels.tsa.arima_model import ARIMA
-from werkzeug.utils import secure_filename
 
 import app
 import config
@@ -35,28 +34,6 @@ IC_METHODS = {
 def home_page():
     """Renders home page, the 'index.html' template."""
     return render_template("index.html")
-
-
-def upload_file(request: Request) -> str:
-    """Uploads file received by request to application data directory, 
-    saves it and returns absolute path to this file."""
-    try:
-
-        # retrieves file from request
-        _file = request.files["file"]
-
-        # absoulte path to file
-        file_path = os.path.join(config.DATA_DIR, secure_filename(_file.filename))
-
-        # saves received file
-        _file.save(file_path)
-
-    except Exception:
-        app.logging.error(f"controller.upload_file() -> {traceback.format_exc()}")
-        return ""
-    else:
-        app.logging.info("file uploaded successfully!")
-        return file_path
 
 
 def analysis(file_path: str):

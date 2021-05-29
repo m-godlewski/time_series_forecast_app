@@ -1,17 +1,16 @@
-import flask
-import flask_restful
+import config
 import logging
 import logging.config
 import warnings
-import yaml
 
-import app
-import config
+import flask
+import flask_restful
+import yaml
 
 
 # disabling startup warnings
-warnings.filterwarnings('ignore')
-warnings.filterwarnings('ignore', 'statsmodels.tsa.ar_model.AR', FutureWarning)
+warnings.filterwarnings("ignore")
+warnings.filterwarnings("ignore", "statsmodels.tsa.ar_model.AR", FutureWarning)
 mpl_logger = logging.getLogger("matplotlib")
 mpl_logger.setLevel(logging.ERROR)
 
