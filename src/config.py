@@ -25,3 +25,10 @@ DATA_DIR = os.path.join(BASE_DIR, "data")
 LOGGING = {
     "CONFIG_FILE": f"{BASE_DIR}/.logs/logging.conf"
 }
+
+# optimal lag length selection criteria
+IC_METHODS = {
+    "aic": "Akaike Information Criterion",
+    "bic": "Bayes Information Criterion",
+    "hqic": "Hannan-Quinn Information Criterion"
+}

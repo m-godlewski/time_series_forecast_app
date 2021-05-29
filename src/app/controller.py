@@ -5,11 +5,9 @@ This file contains all methods that are called by route.py file.
 """
 
 
-import itertools
 import os
 import traceback
 
-from flask import Request
 from flask import render_template
 from math import sqrt
 from matplotlib import pyplot as plt
@@ -21,14 +19,6 @@ import app
 import config
 from app.utills.file_manager import FileManager
 from app.models.time_series import TimeSeries
-
-
-# optimal lag length selection criteria
-IC_METHODS = {
-    "aic": "Akaike Information Criterion",
-    "bic": "Bayes Information Criterion",
-    "hqic": "Hannan-Quinn Information Criterion"
-}
 
 
 def home_page():
@@ -169,7 +159,7 @@ def forecast_ar(file_path: str, parameters: dict):
         data["lag"] = trained_model.k_ar
         data["tobs"] = trained_model.n_totobs
         data["rmse"] = rmse
-        data["ic"] = IC_METHODS[data["ic"]]
+        data["ic"] = config.IC_METHODS[data["ic"]]
 
     except Exception:
         app.logging.error(f"time_series_forecast_ar() ERROR \n{traceback.format_exc()}")
