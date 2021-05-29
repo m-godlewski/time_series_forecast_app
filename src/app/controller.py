@@ -60,7 +60,6 @@ def analysis(file_path: str):
 
     except Exception:
         app.logging.error(f"analysis() ERROR \n{traceback.format_exc()}")
-        return render_template("500.html")
     else:
         app.logging.info(f"time series '{time_series.name}' analysis.")
         app.logging.info(time_series.info)
@@ -174,7 +173,6 @@ def forecast_ar(file_path: str, parameters: dict):
 
     except Exception:
         app.logging.error(f"time_series_forecast_ar() ERROR \n{traceback.format_exc()}")
-        return render_template("500.html")
     else:
         app.logging.info(f"time series '{file_name}' forecasted successfully using AR!")
         return render_template("ar.html", data=data)
@@ -256,7 +254,6 @@ def forecast_arima(file_path: str, parameters: dict):
 
     except Exception:
         app.logging.error(f"forecast_arima() ERROR \n{traceback.format_exc()}")
-        return render_template("500.html")
     else:
         app.logging.info(f"time series '{file_name}' forecasted successfully using ARIMA!")
         return render_template("arima.html", data=data)
