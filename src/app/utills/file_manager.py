@@ -49,7 +49,7 @@ class FileManager:
             _file.save(file_path)
 
         except Exception:
-            app.logging.error(f"controller.upload_file() -> {traceback.format_exc()}")
+            app.logging.error(f"FileManager.upload_file() -> {traceback.format_exc()}")
             return ""
         else:
             app.logging.info("file uploaded successfully!")
