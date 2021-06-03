@@ -5,7 +5,6 @@ This script contains FileManager class responsible for managing files in this ap
 """
 
 
-from yaml.tokens import StreamStartToken
 import config
 import os
 import traceback
@@ -30,7 +29,7 @@ class FileManager:
     @staticmethod
     def save_file(file_name: str, data: pd.DataFrame):
         """Save given pandas DataFrame object to csv file,
-        wchich name is defined by 'file_name' argument."""
+        which name is defined by 'file_name' argument."""
         path = os.path.join(file_name)
         data.to_csv(path_or_buf=path, index=False)
 
@@ -58,5 +57,5 @@ class FileManager:
 
     @staticmethod
     def get_file_name_from_(path: str):
-        """Returns file name, without extension from received absolute path."""
+        """Returns file name without extension from absolute path."""
         return os.path.split(path)[-1].split(".")[0]

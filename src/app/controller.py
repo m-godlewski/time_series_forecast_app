@@ -28,7 +28,7 @@ def home_page():
 
 def analysis(file_path: str):
     """Renders template with statistical information and plots of time series
-    included in file which path is given by 'file_path' argument.
+    included in file, which path is given by 'file_path' argument.
     """
     try:
 
@@ -39,57 +39,21 @@ def analysis(file_path: str):
         data_file = FileManager.read_file(file_name=file_path)
 
         # creation of TimeSeries object
-        file_name = FileManager.get_file_name_from_(path=file_path)
-        time_series = TimeSeries(dataset=data_file, name=file_name)
+        name = FileManager.get_file_name_from_(path=file_path)
+        time_series = TimeSeries(dataset=data_file, name=name)
         data["analyse"] = time_series.info
 
         # visualisation of created time series
-        plots = visualisation(file_path=file_path)
+        plots = _visualisation(file_path=file_path)
         if plots:
             data["plots"] = plots
 
     except Exception:
-        app.logging.error(f"analysis() ERROR \n{traceback.format_exc()}")
+        app.logging.error(f"analysis() -> \n{traceback.format_exc()}")
     else:
         app.logging.info(f"time series '{time_series.name}' analysis.")
         app.logging.info(time_series.info)
         return render_template("analysis.html", data=data)
-
-
-def visualisation(file_path: str) -> list:
-    """Creates plots of time series, that path is given as 'file_path' argument.
-    This method returns list of all created and saved plots names.
-
-    This method creates three types of plots:
-    1. normal plot - that visualise time series course.
-    2. autocorelation plot - visualise correlation between original and lagged time series.
-    3. histogram - visualise histogram of time series values column.
-    All created plots are saved to data directory.
-    """
-    try:
-
-        # loads content of file
-        data_file = FileManager.read_file(file_name=file_path)
-
-        # creation of TimeSeries object
-        file_name = os.path.split(file_path)[-1].split(".")[0]
-        time_series = TimeSeries(dataset=data_file, name=file_name)
-
-        # drawing plots and saving them to files
-        plots = []
-        plots.append(time_series.draw())
-        plots.append(time_series.draw_autocorelation(lags=100))
-        plots.append(time_series.draw_histogram())
-
-        # clearing matplotlib plot
-        plt.clf()
-
-    except Exception:
-        app.logging.error(f"visualisation() ERROR \n{traceback.format_exc()}")
-        return []
-    else:
-        app.logging.info(f"time series '{file_name}' plots created!")
-        return plots
 
 
 def forecast_ar(file_path: str, parameters: dict):
@@ -100,7 +64,7 @@ def forecast_ar(file_path: str, parameters: dict):
     Base of loaded file content, TimeSeries class object is created.
     Before model training, time series is splitted to train and test subsetest
     basing on given by 'parameters' argument value.
-    Train subset is used for model training, test subset, for testing model accuracy.
+    Training subset is used for model training, test subset, for testing model accuracy.
     Model is trained base on received from HTML form parameters.
     After model training and test forecasting, results are plotted and saved to file.
     At the end, this method renders template with forecast results plot, and its parameters.
@@ -110,7 +74,7 @@ def forecast_ar(file_path: str, parameters: dict):
         app.logging.info("time series forecasting using AR")
         app.logging.info(f"parameters = {parameters}")
 
-        # dictionary that will contains all data for rendering
+        # dictionary that will contain all data for rendering
         data = {}
 
         # preparing parameters
@@ -121,8 +85,8 @@ def forecast_ar(file_path: str, parameters: dict):
         data_file = FileManager.read_file(file_name=file_path)
 
         # creation of TimeSeries object
-        file_name = os.path.split(file_path)[-1].split(".")[0]
-        time_series = TimeSeries(dataset=data_file, name=file_name)
+        name = FileManager.get_file_name_from_(path=file_path)
+        time_series = TimeSeries(dataset=data_file, name=name)
 
         # split time series to train and test datasets
         train_data, test_data = time_series.split(ratio=data["split_ratio"])
@@ -162,9 +126,9 @@ def forecast_ar(file_path: str, parameters: dict):
         data["ic"] = config.IC_METHODS[data["ic"]]
 
     except Exception:
-        app.logging.error(f"time_series_forecast_ar() ERROR \n{traceback.format_exc()}")
+        app.logging.error(f"forecast_ar() -> {traceback.format_exc()}")
     else:
-        app.logging.info(f"time series '{file_name}' forecasted successfully using AR!")
+        app.logging.info(f"time series '{name}' forecasted successfully using AR!")
         return render_template("ar.html", data=data)
 
 
@@ -176,7 +140,7 @@ def forecast_arima(file_path: str, parameters: dict):
     Base of loaded file content, TimeSeries class object is created.
     Before model training, time series is splitted to train and test subsetest
     basing on given by 'parameters' argument value.
-    Train subset is used for model training, test subset, for testing model accuracy.
+    Training subset is used for model training, test subset, for testing model accuracy.
     Model is trained base on received from HTML form parameters.
     After model training and test forecasting, results are plotted and saved to file.
     At the end, this method renders template with forecast results plot, and its parameters.
@@ -186,7 +150,7 @@ def forecast_arima(file_path: str, parameters: dict):
         app.logging.info("time series forecasting using ARIMA")
         app.logging.info(parameters)
 
-        # dictionary that will contains all data for rendering
+        # dictionary that will contain all data for rendering
         data = {}
 
         # preparing parameters
@@ -199,8 +163,8 @@ def forecast_arima(file_path: str, parameters: dict):
         data_file = FileManager.read_file(file_name=file_path)
 
         # creation of TimeSeries object
-        file_name = os.path.split(file_path)[-1].split(".")[0]
-        time_series = TimeSeries(dataset=data_file, name=file_name)
+        name = FileManager.get_file_name_from_(path=file_path)
+        time_series = TimeSeries(dataset=data_file, name=name)
 
         # split time series to train and test datasets
         train_data, test_data = time_series.split(ratio=data["split_ratio"])
@@ -212,7 +176,7 @@ def forecast_arima(file_path: str, parameters: dict):
                 data["ar"],
                 data["i"],
                 data["ma"]
-                )
+            )
         )
 
         # ARIMA model training
@@ -243,7 +207,43 @@ def forecast_arima(file_path: str, parameters: dict):
         data["hqic"] = trained_model.hqic
 
     except Exception:
-        app.logging.error(f"forecast_arima() ERROR \n{traceback.format_exc()}")
+        app.logging.error(f"forecast_arima() -> {traceback.format_exc()}")
     else:
-        app.logging.info(f"time series '{file_name}' forecasted successfully using ARIMA!")
+        app.logging.info(f"time series '{name}' forecasted successfully using ARIMA!")
         return render_template("arima.html", data=data)
+
+
+def _visualisation(file_path: str) -> list:
+    """Creates plots of time series, that path is given as 'file_path' argument.
+    This method returns list of all created and saved plots names.
+
+    This method creates three types of plots:
+    1. normal plot - that visualise time series course.
+    2. autocorelation plot - visualise correlation between original and lagged time series.
+    3. histogram - visualise histogram of time series values column.
+    All created plots are saved to data directory.
+    """
+    try:
+
+        # loads content of file
+        data_file = FileManager.read_file(file_name=file_path)
+
+        # creation of TimeSeries object
+        file_name = os.path.split(file_path)[-1].split(".")[0]
+        time_series = TimeSeries(dataset=data_file, name=file_name)
+
+        # drawing plots and saving them to files
+        plots = []
+        plots.append(time_series.draw())
+        plots.append(time_series.draw_autocorelation(lags=100))
+        plots.append(time_series.draw_histogram())
+
+        # clearing matplotlib plot
+        plt.clf()
+
+    except Exception:
+        app.logging.error(f"visualisation() -> {traceback.format_exc()}")
+        return []
+    else:
+        app.logging.info(f"time series '{file_name}' plots created!")
+        return plots
