@@ -59,6 +59,7 @@ class TimeSeries:
             "minimum_value": self.min_value,
             "maximum_value": self.max_value,
             "average_value": self.average_value,
+            "median_value": self.median_value,
             "standard_deviation_value": self.std_deviation_value,
             "interquartile_value": self.interquartile_value,
         }
@@ -66,34 +67,34 @@ class TimeSeries:
     @property
     def min_value(self) -> float:
         """Returns minimum value of time series."""
-        return self.data["value"].min()
+        return self.data["value"].min().round(2)
 
     @property
     def max_value(self) -> float:
         """Returns maximum value of time series."""
-        return self.data["value"].max()
+        return self.data["value"].max().round(2)
 
     @property
     def average_value(self) -> float:
         """Returns average value of time series."""
-        return self.data["value"].mean()
-
-    @property
-    def std_deviation_value(self) -> float:
-        """Returns standard deviation value of time series."""
-        return self.data["value"].std()
+        return self.data["value"].mean().round(2)
 
     @property
     def median_value(self) -> float:
         """Returns median value of time series."""
-        return self.data["value"].median()
+        return self.data["value"].median().round(2)
+
+    @property
+    def std_deviation_value(self) -> float:
+        """Returns standard deviation value of time series."""
+        return self.data["value"].std().round(2)
 
     @property
     def interquartile_value(self) -> float:
         """Returns interquartile value of time series.
         Interquantile is difference between third and first quartile.
         """
-        return stats.iqr(self.data["value"], interpolation="midpoint")
+        return stats.iqr(self.data["value"], interpolation="midpoint").round(2)
 
     # endregion
  
@@ -156,11 +157,8 @@ class TimeSeries:
             # seting 'date' as index of dataset
             plot_dataset = self.data.set_index("date")
 
-            # polting time series with legends and labels based on object 'name'
-            if self.name == "amazon_stock_prices":
-                plot_dataset.plot(rot=15, legend=False, xlabel="date", ylabel="stock price (USD)")
-            elif self.name == "monthly_beer_production_in_austria":
-                plot_dataset.plot(rot=15, legend=False, xlabel="date", ylabel="beer production (million HL)")
+            # polting time series with legends and labels
+            plot_dataset.plot(rot=15, legend=False, xlabel="Data", ylabel="Wartość")
 
             # seting layout of figure
             plt.tight_layout()
@@ -209,7 +207,7 @@ class TimeSeries:
             plot_dataset = self.data.set_index("date")
 
             # ploting autocorelation function
-            plot_acf(plot_dataset, lags=lags)
+            plot_acf(plot_dataset, lags=lags, title="Autokorelacja")
 
             # figure file name and file path
             file_name = f"{self.name}_autocorelation_{lags}.png"

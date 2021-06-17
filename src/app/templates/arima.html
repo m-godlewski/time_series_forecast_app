@@ -6,7 +6,7 @@
 <div class="container-fluid">
 
     <!-- Visualisation of results -->
-    <center><h3><b>ARIMA Forecast Results</b></h3></center>
+    <center><h3><b>Wyniki prognozy metodą ARIMA</b></h3></center>
 
     <div class="row">
 
@@ -21,31 +21,31 @@
             <table class="table">
                 <tbody>
                   <tr>
-                    <td>Number of trained observations</td>
+                    <td>Ilość trenowanych obserwacji</td>
                     <td>{{data.tobs}}</td>
                   </tr>
                   <tr>
-                    <td>AR</td>
+                    <td>Parametr p</td>
                     <td>{{data.ar}}</td>
                   </tr>
                   <tr>
-                    <td>I</td>
+                    <td>Parametr d</td>
                     <td>{{data.i}}</td>
                   </tr>
                   <tr>
-                    <td>MA</td>
+                    <td>Parametr q</td>
                     <td>{{data.ma}}</td>
                   </tr>
                   <tr>
-                    <td>AIC - Akaike Information Criterion</td>
+                    <td>Błąd prognozy modelu według kryterium AIC</td>
                     <td>{{data.aic}}</td>
                   </tr>
                   <tr>
-                    <td>BIC - Bayesian Information Criterion</td>
+                    <td>Błąd prognozy modelu według kryterium BIC</td>
                     <td>{{data.bic}}</td>
                   </tr>
                   <tr>
-                    <td>HQIC - Hannan–Quinn Information Criterion</td>
+                    <td>Błąd prognozy modelu według kryterium HQIC</td>
                     <td>{{data.hqic}}</td>
                   </tr>
                 </tbody>
@@ -56,4 +56,4 @@
 
 </div>
 
-{% endblock  %}z
+{% endblock  %}

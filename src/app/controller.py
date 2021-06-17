@@ -108,8 +108,8 @@ def forecast_ar(file_path: str, parameters: dict):
         rmse = sqrt(mean_squared_error(test_data, forecast_results))
 
         # plotting forecasting results and saving to file
-        plt.plot(test_data, color="blue", label="real")   # plotting real values
-        plt.plot(forecast_results, color="red", label="predicted") # plotting predicted values
+        plt.plot(test_data, color="blue", label="rzeczywiste")   # plotting real values
+        plt.plot(forecast_results, color="red", label="prognozowane") # plotting predicted values
         plt.legend(loc="upper right")
         plot_name = f"{time_series.name}_forecast_ar_{data['ic']}_{data['split_ratio']}.png"  # name of plotted file
         plot_path = os.path.join(config.STATIC_DIR, plot_name)  # plotted file path

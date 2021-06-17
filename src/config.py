@@ -28,7 +28,7 @@ LOGGING = {
 
 # optimal lag length selection criteria
 IC_METHODS = {
-    "aic": "Akaike Information Criterion",
-    "bic": "Bayes Information Criterion",
-    "hqic": "Hannan-Quinn Information Criterion"
+    "aic": "Kryterium Informacyjne Akaike’a",
+    "bic": "Bayesowskie kryterium informacyjne Schwarza",
+    "hqic": "Kryterium informacyjne Hannana-Quinna"
 }
