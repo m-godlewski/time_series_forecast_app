@@ -56,7 +56,7 @@
           <form action="/ar" method="POST">
 
             <!-- dataset split ratio value -->
-            <input name="split_ratio" type="text" placeholder="Współczynnik podziału zbioru (domyślnie = 0.8)" class="form-control" pattern="^\d*(\.\d{0,2})?$">
+            <input name="split_ratio" type="number" min="0.1" max="0.9" step="0.1" placeholder="Współczynnik podziału zbioru (domyślnie = 0.8)" class="form-control" pattern="^\d*(\.\d{0,2})?$">
 
             <!-- ic method select -->
             <select name="ar_ic" class="form-control">
@@ -80,16 +80,16 @@
           <form action="/arima" method="POST">
 
             <!-- dataset split ratio value -->
-            <input name="split_ratio" type="text" placeholder="Współczynnik podziału zbioru (domyślnie = 0.8)" class="form-control" pattern="^\d*(\.\d{0,2})?$">
+            <input name="split_ratio" type="number" min="0.1" max="0.9" step="0.1" placeholder="Współczynnik podziału zbioru (domyślnie = 0.8)" class="form-control" pattern="^\d*(\.\d{0,2})?$">
 
             <!-- AR -->
-            <input name="arima_ar" type="text" placeholder="Parametr p (domyślnie = 10)" class="form-control">
+            <input name="arima_ar" type="number" min="0" step="1" placeholder="Parametr p (domyślnie = 10)" class="form-control">
 
             <!-- I -->
-            <input name="arima_i" type="text" placeholder="Parametr d (domyślnie = 1)" class="form-control">
+            <input name="arima_i" type="number" min="0" step="1" placeholder="Parametr d (domyślnie = 1)" class="form-control">
 
             <!-- MA -->
-            <input name="arima_ma" type="text" placeholder="Parametr q (domyślnie = 2)" class="form-control">
+            <input name="arima_ma" type="number" min="0" step="1" placeholder="Parametr q (domyślnie = 2)" class="form-control">
 
             <!-- submit button -->
             <button type="submit" formmethod="post" class="btn btn-primary text-white form-control">Prognoza</button>
