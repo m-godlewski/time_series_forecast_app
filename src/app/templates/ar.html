@@ -6,7 +6,7 @@
 <div class="container-fluid">
 
     <!-- Visualisation of results -->
-    <center><h3><b>Autoregression Forecast Results</b></h3></center>
+    <center><h3><b>Wyniki prognozy modelu AR</b></h3></center>
 
     <div class="row">
 
@@ -21,19 +21,19 @@
             <table class="table">
                 <tbody>
                   <tr>
-                    <td>Criterion used for selecting the optimal lag length.</td>
+                    <td>Kryterium doboru rządu predykcji</td>
                     <td>{{data.ic}}</td>
                   </tr>
                   <tr>
-                    <td>Lag length</td>
+                    <td>Rząd predykcji</td>
                     <td>{{data.lag}}</td>
                   </tr>
                   <tr>
-                    <td>Number of trained observations</td>
+                    <td>Ilość trenowanych obserwacji</td>
                     <td>{{data.tobs}}</td>
                   </tr>
                   <tr>
-                    <td>RMSE - root-mean-square error</td>
+                    <td>Wartość RMSE - błędu średniokwadratowego</td>
                     <td>{{data.rmse}}</td>
                   </tr>
                 </tbody>
@@ -44,4 +44,4 @@
 
 </div>
 
-{% endblock  %}z
+{% endblock  %}

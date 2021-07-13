@@ -13,28 +13,32 @@
         <!-- statistical data section -->
         <div class="pl-5 pt-5">
 
-          <h3 class="pb-3"><b>Statistical data</b></h3>
+          <h3 class="pb-3"><b>Analiza statystyczna</b></h3>
 
           <table class="table">
             <tbody>
               <tr>
-                <td>Minimum value</td>
+                <td>Wartość minimalna</td>
                 <td>{{data.analyse.minimum_value}}</td>
               </tr>
               <tr>
-                <td>Maximum value</td>
+                <td>Wartość maksymalna</td>
                 <td>{{data.analyse.maximum_value}}</td>
               </tr>
               <tr>
-                <td>Average value</td>
+                <td>Wartość średnia</td>
                 <td>{{data.analyse.average_value}}</td>
               </tr>
               <tr>
-                <td>Standard deviation value</td>
+                <td>Mediana</td>
+                <td>{{data.analyse.median_value}}</td>
+              </tr>
+              <tr>
+                <td>Odchylenie standardowe</td>
                 <td>{{data.analyse.standard_deviation_value}}</td>
               </tr>
               <tr>
-                <td>Interquartile value</td>
+                <td>Interkwartyl</td>
                 <td>{{data.analyse.interquartile_value}}</td>
               </tr>
             </tbody>
@@ -45,25 +49,25 @@
         <!-- forecasting section -->
         <div class="pl-5 pt-5">
 
-          <h3 class="pb-3"><b>Forecasting</b></h3>
+          <h3 class="pb-3"><b>Prognozowanie</b></h3>
 
           <!-- AR -->
-          <center><h5 class="pt-3 pb-3"><b>Autoregression</b></h5></center>
+          <center><h5 class="pt-3 pb-3"><b>AR</b></h5></center>
           <form action="/ar" method="POST">
 
             <!-- dataset split ratio value -->
-            <input name="split_ratio" type="text" placeholder="Dataset split ratio (default = 0.8)" class="form-control" pattern="^\d*(\.\d{0,2})?$">
+            <input name="split_ratio" type="number" min="0.1" max="0.9" step="0.1" placeholder="Współczynnik podziału zbioru (domyślnie = 0.8)" class="form-control" pattern="^\d*(\.\d{0,2})?$">
 
             <!-- ic method select -->
             <select name="ar_ic" class="form-control">
               <!-- <option value="" disabled selected>Criterion used for selecting the optimal lag length</option> -->
-              <option value="aic">Akaike Information Criterion</option>
-              <option value="bic">Bayes Information Criterion</option>
-              <option value="hqic">Hannan-Quinn Information Criterion</option>
+              <option value="aic">Kryterium Informacyjne Akaike’a</option>
+              <option value="bic">Bayesowskie kryterium informacyjne Schwarza</option>
+              <option value="hqic">Kryterium informacyjne Hannana-Quinna</option>
             </select>
 
             <!-- submit button -->
-            <button type="submit" formmethod="post" class="btn btn-primary text-white form-control">Forecast</button>
+            <button type="submit" formmethod="post" class="btn btn-primary text-white form-control">Prognoza</button>
 
           </form>
 
@@ -76,19 +80,19 @@
           <form action="/arima" method="POST">
 
             <!-- dataset split ratio value -->
-            <input name="split_ratio" type="text" placeholder="Dataset split ratio (0.8 as default)" class="form-control" pattern="^\d*(\.\d{0,2})?$">
+            <input name="split_ratio" type="number" min="0.1" max="0.9" step="0.1" placeholder="Współczynnik podziału zbioru (domyślnie = 0.8)" class="form-control" pattern="^\d*(\.\d{0,2})?$">
 
             <!-- AR -->
-            <input name="arima_ar" type="text" placeholder="AR (default = 10)" class="form-control">
+            <input name="arima_ar" type="number" min="0" step="1" placeholder="Parametr p (domyślnie = 10)" class="form-control">
 
             <!-- I -->
-            <input name="arima_i" type="text" placeholder="I (default = 1)" class="form-control">
+            <input name="arima_i" type="number" min="0" step="1" placeholder="Parametr d (domyślnie = 1)" class="form-control">
 
             <!-- MA -->
-            <input name="arima_ma" type="text" placeholder="MA (default = 2)" class="form-control">
+            <input name="arima_ma" type="number" min="0" step="1" placeholder="Parametr q (domyślnie = 2)" class="form-control">
 
             <!-- submit button -->
-            <button type="submit" formmethod="post" class="btn btn-primary text-white form-control">Forecast</button>
+            <button type="submit" formmethod="post" class="btn btn-primary text-white form-control">Prognoza</button>
 
           </form>
 
@@ -101,7 +105,7 @@
 
         <div class="pl-5 pt-5">
 
-          <center><h3 class="pb-3"><b>Visualisations</b></h3></center>
+          <center><h3 class="pb-3"><b>Wizualizacje</b></h3></center>
 
           {% for plot in data.plots %} 
             <img class="rounded mx-auto d-block" width="70%" src="/static/{{plot}}">
