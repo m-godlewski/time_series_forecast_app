@@ -234,7 +234,4 @@ pip-selfcheck.json
 # static files
 app/static/*
 
-# data directory content
-data/*
-
 # End of https://www.toptal.com/developers/gitignore/api/python,visualstudiocode,flask,venv
